@@ -28,7 +28,7 @@
         cidr: "{{ pubSub1Cidr }}"
         map_public: true
         resource_tags:
-          name: vprofile_pubsub1
+          name: vprofile-pubsub1
       register: pubsub1_out
 
 
@@ -41,7 +41,7 @@
         cidr: "{{ pubSub2Cidr }}"
         map_public: true
         resource_tags:
-          name: vprofile_pubsub2
+          name: vprofile-pubsub2
       register: pubsub2_out
 
 
