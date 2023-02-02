@@ -105,11 +105,3 @@
           name: vprofile_IGW
       register: igw_out
 
-    - name: internet gateway setup 2
-      ec2_vpc_igw:
-        vpc_id: "{{ vpcout.vpc.id }}"
-        region: "{{ region }}"
-        state: "{{ state }}"
-        resource_tags:
-        name: vprofile_IGW2
-      register: igw_out2
