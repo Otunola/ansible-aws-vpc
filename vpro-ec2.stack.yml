@@ -53,4 +53,131 @@
                to_port: 22
                group_id: "{{ BastionSGid}}".......
 
-        register: vproELBsg_out
+        register: vprostacksg_out
+
+
+      - name: update sec group with its own sg id
+        ec2_group:
+          name: vprostack-sg
+          description: allow port 80 from everywhere 
+          region: "{{ region }}"
+          vpc_id: "{{  }}"
+          purge_rules: no
+          rules: 
+            - proto: all
+              group_id: "{{ vprostacksg_out.group_id }}"
+
+
+      - name: creating Nginx web01
+        ec2:
+          key_name: vpro-key
+          region: "{{ region }}"
+          instance_type: t2.micro
+          image: "{{ nginx_ami }}"
+          wait: yes
+          wait_timeout: 300
+          instance_tags:
+            name: "web01"
+            project: vprofile
+            owner: devops team
+          exact_count: 1
+          count_tag:
+            name: "web01"
+            project: vprofile
+            owner: devops team
+          group_id: "{{ vprostacksg_out.group_id }}"
+          vpc_subnet_id: "{{ privsub1id }}".......
+        register: web01_out
+
+
+
+      - name: creating tomcat app01
+        ec2:
+          key_name: vpro-key
+          region: "{{ region }}"
+          instance_type: t2.micro
+          image: "{{ tomcat_ami }}"
+          wait: yes
+          wait_timeout: 300
+          instance_tags:
+            name: "app01"
+            project: vprofile
+            owner: devops team
+          exact_count: 1
+          count_tag:
+            name: "app01"
+            project: vprofile
+            owner: devops team
+          group_id: "{{ vprostacksg_out.group_id }}"
+          vpc_subnet_id: "{{ privsub1id }}".......
+        register: app01_out
+
+
+      - name: creating memcache mc01
+        ec2:
+          key_name: vpro-key
+          region: "{{ region }}"
+          instance_type: t2.micro
+          image: "{{ memcache_ami }}"
+          wait: yes
+          wait_timeout: 300
+          instance_tags:
+            name: "mc01"
+            project: vprofile
+            owner: devops team
+          exact_count: 1
+          count_tag:
+            name: "mc01"
+            project: vprofile
+            owner: devops team
+          group_id: "{{ vprostacksg_out.group_id }}"
+          vpc_subnet_id: "{{ privsub1id }}".......
+        register: mc01_out
+
+
+
+      - name: creating Rabbit rmq01
+        ec2:
+          key_name: vpro-key
+          region: "{{ region }}"
+          instance_type: t2.micro
+          image: "{{ rmq_ami }}"
+          wait: yes
+          wait_timeout: 300
+          instance_tags:
+            name: "rmq01"
+            project: vprofile
+            owner: devops team
+          exact_count: 1
+          count_tag:
+            name: "rmq01"
+            project: vprofile
+            owner: devops team
+          group_id: "{{ vprostacksg_out.group_id }}"
+          vpc_subnet_id: "{{ privsub1id }}".......
+        register: rmq01_out
+
+
+      - name: creating mysql db01
+        ec2:
+          key_name: vpro-key
+          region: "{{ region }}"
+          instance_type: t2.micro
+          image: "{{ mysql_ami }}"
+          wait: yes
+          wait_timeout: 300
+          instance_tags:
+            name: "db01"
+            project: vprofile
+            owner: devops team
+          exact_count: 1
+          count_tag:
+            name: "db01"
+            project: vprofile
+            owner: devops team
+          group_id: "{{ vprostacksg_out.group_id }}"
+          vpc_subnet_id: "{{ privsub1id }}".......
+        register: db01_out
+
+      - debug:
+          var: db01_out
