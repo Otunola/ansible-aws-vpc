@@ -1,0 +1,5 @@
+nginx_ami: ami-
+tomcat_ami: ami-
+memcache_ami: ami-
+rmq_ami: ami-
+mysql_ami: ami-
