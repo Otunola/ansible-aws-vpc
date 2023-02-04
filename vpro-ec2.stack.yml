@@ -4,3 +4,19 @@
   tasks:
       - name: Import VPC Variables
         include_vars: vars/vpc_setup
+
+      - name: Import Vprofile Variables
+        include_vars: vars/vprostacksetup
+
+      - name: create vprofile ec2 key
+        ec2_key:
+          name: vpro-key
+          region: "{{ region }}"
+        register: vprokey_out
+
+      - name: save private key into bastion-key.pem
+        copy:
+          content: "{{vprokey_out.key.private_key}}"
+          dest: "./vprokey_outkey.pem"
+          mode: 0600
+        when: vprokey_out.changed
